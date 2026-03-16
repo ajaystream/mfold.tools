@@ -1,41 +1,36 @@
 # manifold
 
-**The data fabric for agents that write**
+**The data fabric for agents that act.**
 
-Manifold connects your APIs, discovers the data model, maps relationships across systems, and exposes everything as one set of LLM tools. Your agent reads across all systems, writes to one, and Manifold auto-syncs the change everywhere — right field names, right format, every system.
+Agents get reads wrong. That's annoying. They get writes wrong. That's a production incident.
+
+Manifold is the write layer for LLM agents. Connect any SDK or API. Manifold discovers your data model, maps relationships across systems at build time, and guarantees every write propagates correctly — right field, right format, right system. Every time.
 
 No integration code. No LLM in the loop at runtime.
 
-→ **[Join the waitlist](https://mfold.tools)**
+→ **[Join the beta](https://mfold.tools)**
 
 ---
 
 ## The problem
 
-You give your agent tools. It calls them. At scale it gets it wrong.
+You wouldn't ship a database without transaction guarantees. But that's exactly what every team building agents across multiple systems is doing right now.
 
-Not always. Not obviously. Enough to matter.
+The LLM has no ground truth about how systems connect. So every write is a reasoning exercise. Which Stripe customer is which QuickBooks vendor. Which field maps to which. It gets it right most of the time. When it gets it wrong, it doesn't return a bad answer — it corrupts production data across multiple systems simultaneously. You don't find out until someone can't reconcile their books three weeks later.
 
-Every new system you connect adds tool surface. More tools means more ambiguity. The LLM reasons about field relationships at runtime. It gets it right most of the time. When it gets it wrong on a write, it doesn't return a bad answer. It corrupts production data across multiple systems.
+Reads across systems? A wrong answer is annoying. A wrong write is a production incident.
 
-"Just give the LLM all the tools" doesn't work.
+**Wrong writes are silent**
+A payment linked to the right customer in Stripe, the wrong vendor in QuickBooks. An invoice with the right amount, the wrong reference. No error thrown. No alert fired. Just drift — until downstream something breaks.
 
-You can hand your LLM 50 API tools and it'll call them. But when it needs to work across systems — match a Stripe charge to a QuickBooks invoice, update a customer's email in three places — it guesses. It gets it wrong. And every time it tries, it reasons differently. You can't build reliable systems on probabilistic cross-system reasoning.
+**Prompting doesn't fix it**
+More context. Tighter instructions. Retry logic. Every fix compensates for missing ground truth. None of it holds at scale. The LLM reasons differently on call 47 than call 3. Same workflow, different outcome.
 
-**The LLM gets matches wrong**
-"Find the matching QuickBooks invoice for this Stripe charge." The LLM fetches from both systems, compares amounts and dates, and picks one. Sometimes it's right. Sometimes it matches the wrong invoice — same amount, different customer. You don't find out until the data is corrupted.
+**The write layer is completely unowned**
+Every semantic layer, every data integration tool, every entity resolution platform stops at read. Nobody has built the guarantee layer for agent writes. Until now.
 
-**Every answer is different**
-Ask the same cross-system question twice, get two different reasoning paths. The LLM might match on amount today and date tomorrow. There's no consistency, no auditability, no way to debug when it's wrong.
-
-**Writes are dangerous without accuracy**
-The LLM doesn't know that Stripe's `cust` is QuickBooks' `VendorRef` is HubSpot's `contact_id`. It guesses from context. For reads, a wrong guess is confusing. For writes, a wrong guess corrupts production data across multiple systems.
-
-**Tool explosion degrades accuracy further**
-10 systems × 20 entity types × 3 operations = 600 tools. LLMs pick the wrong tool more often as the tool set grows. Manifold gives you 12 tools that span everything — the LLM always picks the right one.
-
-**Token cost scales with inaccuracy**
-When the LLM gets cross-system reasoning wrong, you retry, add more context, chain more calls. You're burning tokens to compensate for a lack of ground truth.
+**Writes are dangerous without ground truth**
+The LLM doesn't know that Stripe's `cust` is QuickBooks' `VendorRef` is HubSpot's `contact_id`. It guesses from context. At 100 workflows a day that's not a bug — it's a guarantee you'll corrupt production data.
 
 ---
 
@@ -206,11 +201,15 @@ The LLM runs once — when you connect a system. At runtime, every read and ever
 
 ## Status
 
-Manifold is in early access. We built this internally while running agentic workflows across payments, ERP, CRM, and metrics platforms. Every time we added a new system the same wall appeared. We saw the same problem repeat across client stacks in e-commerce, DevOps, and internal tooling. We're making it available now.
+Manifold is in early access. We built this after running 100 agentic payment workflows a day — subscription creates, invoice sends, contract data flowing across Stripe, QuickBooks, and HubSpot. The reads were fine. The writes kept corrupting production data in ways we didn't find until weeks later. We tried everything. Prompting. Memory. Mapping tables. None of it held at scale.
+
+We stopped trying to fix the LLM and built the guarantee layer.
+
+Then our clients hit the same wall on completely different stacks — e-commerce, DevOps, internal tooling. Same problem, different systems. We're making it available now.
 
 Python library first. Install locally. Your data stays in your infrastructure.
 
-**[Join the waitlist at mfold.tools](https://mfold.tools)**
+**[Join the beta at mfold.tools](https://mfold.tools)**
 
 ---
 
