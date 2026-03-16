@@ -1,6 +1,6 @@
 # manifold
 
-**Your AI agent can call APIs. It gets the connections between them wrong.**
+**The data fabric for agents that write**
 
 Manifold connects your APIs, discovers the data model, maps relationships across systems, and exposes everything as one set of LLM tools. Your agent reads across all systems, writes to one, and Manifold auto-syncs the change everywhere — right field names, right format, every system.
 
