@@ -1,6 +1,6 @@
 # manifold
 
-**The data fabric for agents that act.**
+**The data fabric for the agentic economy**
 
 Agents get reads wrong. That's annoying. They get writes wrong. That's a production incident.
 
